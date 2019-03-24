@@ -1,4 +1,4 @@
-import 'package:nugget/bloc_provider.dart';
+import 'package:nugget/src/resources/bloc_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CounterBloc implements BlocBase {
