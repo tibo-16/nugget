@@ -43,6 +43,20 @@ class _MyHomePageState extends State<MyHomePage> {
                         style: Theme.of(context).textTheme.display1,
                       );
                     }),
+                StreamBuilder(
+                  stream: _bloc.entries,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Text('Keine Daten!');
+                    } else if (snapshot.hasError) {
+                      return Text(snapshot.error);
+                    } else {
+                      print('Entries Count: ${snapshot.data.documents.length}');
+                      return Text(
+                          'Daten vorhanden! ${snapshot.data.documents.length}');
+                    }
+                  },
+                )
               ],
             ),
           ),
