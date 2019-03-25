@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nugget/src/blocs/counter_bloc.dart';
+import 'package:nugget/src/blocs/firebase_bloc.dart';
 import 'package:nugget/src/resources/bloc_provider.dart';
 import 'package:nugget/src/ui/home_page.dart';
 
@@ -14,7 +14,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: BlocProvider<CounterBloc>(bloc: CounterBloc(), child: MyHomePage()),
+      home:
+          BlocProvider<FirebaseBloc>(bloc: FirebaseBloc(), child: MyHomePage()),
     );
   }
 }

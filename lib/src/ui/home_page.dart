@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:nugget/src/blocs/counter_bloc.dart';
+import 'package:nugget/src/blocs/firebase_bloc.dart';
 import 'package:nugget/src/resources/bloc_provider.dart';
 import 'package:nugget/utils/app_colors.dart';
 
@@ -11,73 +12,56 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  CounterBloc _bloc;
+  FirebaseBloc _bloc;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _bloc = BlocProvider.of<CounterBloc>(context);
+    _bloc = BlocProvider.of<FirebaseBloc>(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [AppColors.PURPLE, AppColors.BLUE])),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  'You have pushed the button this many times:',
-                ),
-                StreamBuilder(
-                    stream: _bloc.counter,
-                    builder: (context, snapshot) {
-                      return Text(
-                        '${snapshot.data}',
-                        style: Theme.of(context).textTheme.display1,
-                      );
-                    }),
-                StreamBuilder(
-                  stream: _bloc.entries,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Text('Keine Daten!');
-                    } else if (snapshot.hasError) {
-                      return Text(snapshot.error);
-                    } else {
-                      print('Entries Count: ${snapshot.data.documents.length}');
-                      return Text(
-                          'Daten vorhanden! ${snapshot.data.documents.length}');
-                    }
-                  },
-                )
-              ],
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [AppColors.PURPLE, AppColors.BLUE])),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              StreamBuilder(
+                stream: _bloc.entries,
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Text('Keine Daten!');
+                  } else if (snapshot.hasError) {
+                    return Text(snapshot.error);
+                  } else {
+                    //print('Entries Count: ${snapshot.data.documents.length}');
+                    //print(snapshot.data.documents[0].documentID);
+                    return Text(
+                        'Daten vorhanden! ${snapshot.data.documents.length}');
+                  }
+                },
+              ),
+              StreamBuilder(
+                stream: _bloc.user,
+                builder: (context, snapshot) {
+                  return Text('User: ${snapshot.data}');
+                },
+              ),
+              FlatButton(
+                child: Text('Create'),
+                onPressed: _bloc.create,
+              )
+            ],
           ),
         ),
-        floatingActionButton: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            FloatingActionButton(
-              onPressed: _bloc.increment,
-              tooltip: 'Increment',
-              child: Icon(Icons.add),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            FloatingActionButton(
-              onPressed: _bloc.decrement,
-              tooltip: 'Decrement',
-              child: Icon(Icons.remove),
-            ),
-          ],
-        ));
+      ),
+    );
   }
 }
