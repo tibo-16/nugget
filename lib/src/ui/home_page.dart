@@ -36,44 +36,45 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: _bloc.signOut,
           ),
         ],
-      ),
-      body: Container(
+        flexibleSpace: Container(
           decoration: BoxDecoration(
               gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [AppColors.PURPLE, AppColors.BLUE])),
-          child: Center(
-            child: StreamBuilder<List<DataEntry>>(
-              stream: _bloc.allEntries,
-              initialData: [],
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
-                } else if (snapshot.hasError) {
-                  print(snapshot.error);
-                  return Text('Fehler!');
-                } else if (!snapshot.hasData) {
-                  return Text('Keine Daten!');
-                } else {
-                  return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, i) {
-                      return Card(
-                        child: ListTile(
-                          title: Text(snapshot.data[i].title),
-                          subtitle:
-                              Text(snapshot.data[i].date.toIso8601String()),
-                          trailing: Text('${snapshot.data[i].value}'),
-                          leading: Text(snapshot.data[i].name.substring(0, 1)),
-                        ),
-                      );
-                    },
+        ),
+        elevation: 0,
+      ),
+      body: Center(
+        child: StreamBuilder<List<DataEntry>>(
+          stream: _bloc.allEntries,
+          initialData: [],
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              print(snapshot.error);
+              return Text('Fehler!');
+            } else if (!snapshot.hasData) {
+              return Text('Keine Daten!');
+            } else {
+              return ListView.builder(
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, i) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(snapshot.data[i].title),
+                      subtitle: Text(snapshot.data[i].date.toIso8601String()),
+                      trailing: Text('${snapshot.data[i].value}'),
+                      leading: Text(snapshot.data[i].name.substring(0, 1)),
+                    ),
                   );
-                }
-              },
-            ),
-          )),
+                },
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 }
