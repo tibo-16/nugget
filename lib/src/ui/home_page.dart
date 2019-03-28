@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nugget/src/blocs/firebase_bloc.dart';
 import 'package:nugget/src/models/data_entry.dart';
@@ -24,53 +23,57 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [AppColors.PURPLE, AppColors.BLUE])),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              StreamBuilder(
-                stream: _bloc.allEntries,
-                builder: (context, AsyncSnapshot<List<DataEntry>> snapshot) {
-                  if (snapshot.hasError) {
-                    print(snapshot.error);
-                    return Text('Fehler');
-                  } else if (!snapshot.hasData) {
-                    return Text('Keine Daten!');
-                  } else {
-                    print('Entries Count: ${snapshot.data.length}');
-                    snapshot.data.forEach((entry) => print(entry.title));
-                    return Text('Daten vorhanden: ${snapshot.data.length}');
-                  }
-                },
-              ),
-              StreamBuilder(
-                stream: _bloc.user,
-                builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Text('Kein User!');
-                  }
-                  return Text('User: ${snapshot.data.email}');
-                },
-              ),
-              FlatButton(
-                child: Text('Sign In'),
-                onPressed: _bloc.signIn,
-              ),
-              FlatButton(
-                child: Text('Sign Out'),
-                onPressed: _bloc.signOut,
-              )
-            ],
-          ),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.person),
+          color: Colors.white,
+          onPressed: _bloc.signIn,
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.directions_run),
+            color: Colors.white,
+            onPressed: _bloc.signOut,
+          ),
+        ],
       ),
+      body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [AppColors.PURPLE, AppColors.BLUE])),
+          child: Center(
+            child: StreamBuilder<List<DataEntry>>(
+              stream: _bloc.allEntries,
+              initialData: [],
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return Text('Fehler!');
+                } else if (!snapshot.hasData) {
+                  return Text('Keine Daten!');
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, i) {
+                      return Card(
+                        child: ListTile(
+                          title: Text(snapshot.data[i].title),
+                          subtitle:
+                              Text(snapshot.data[i].date.toIso8601String()),
+                          trailing: Text('${snapshot.data[i].value}'),
+                          leading: Text(snapshot.data[i].name.substring(0, 1)),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          )),
     );
   }
 }
