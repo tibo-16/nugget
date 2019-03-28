@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:nugget/src/blocs/firebase_bloc.dart';
+import 'package:nugget/src/models/data_entry.dart';
 import 'package:nugget/src/resources/bloc_provider.dart';
 import 'package:nugget/utils/app_colors.dart';
 
@@ -36,16 +36,17 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               StreamBuilder(
-                stream: _bloc.entries,
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) {
+                stream: _bloc.allEntries,
+                builder: (context, AsyncSnapshot<List<DataEntry>> snapshot) {
+                  if (snapshot.hasError) {
+                    print(snapshot.error);
+                    return Text('Fehler');
+                  } else if (!snapshot.hasData) {
                     return Text('Keine Daten!');
-                  } else if (snapshot.hasError) {
-                    return Text(snapshot.error);
                   } else {
-                    print('Entries Count: ${snapshot.data.documents.length}');
-                    snapshot.data.documents.forEach((doc) => print(doc.data['name']));
-                    return Text('Daten vorhanden');
+                    print('Entries Count: ${snapshot.data.length}');
+                    snapshot.data.forEach((entry) => print(entry.title));
+                    return Text('Daten vorhanden: ${snapshot.data.length}');
                   }
                 },
               ),
@@ -59,12 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               FlatButton(
-                child: Text('Login'),
-                onPressed: _bloc.login,
+                child: Text('Sign In'),
+                onPressed: _bloc.signIn,
               ),
               FlatButton(
-                child: Text('Logout'),
-                onPressed: _bloc.logout,
+                child: Text('Sign Out'),
+                onPressed: _bloc.signOut,
               )
             ],
           ),
