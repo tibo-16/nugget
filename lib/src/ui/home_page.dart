@@ -52,11 +52,59 @@ class _MyHomePageState extends State<MyHomePage> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: 40,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.25),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Expanded(
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10))),
+                          color: Colors.white70,
+                          child: RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: 'Jenny: ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87)),
+                              TextSpan(
+                                  text: '120,50 €',
+                                  style: TextStyle(color: Colors.black87))
+                            ]),
+                          ),
+                          onPressed: () => print('jenny'),
+                        ),
+                      ),
+                      Expanded(
+                        child: FlatButton(
+                          child: RichText(
+                            text: TextSpan(children: [
+                              TextSpan(
+                                  text: 'Tobi: ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87)),
+                              TextSpan(
+                                  text: '120,50 €',
+                                  style: TextStyle(color: Colors.black87))
+                            ]),
+                          ),
+                          onPressed: () => print('tobi'),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
           ),
@@ -68,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               print(snapshot.error);
-              return Text('Fehler!');
+              return Center(child: Text('Fehler!'));
             } else if (!snapshot.hasData) {
               return Center(child: Text('Keine Daten!'));
             } else {
