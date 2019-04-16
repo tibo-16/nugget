@@ -79,8 +79,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87)),
                           TextSpan(
-                              text:
-                                  '${Utils.calculateSumForName(snapshot.data, 'Jenny')} €',
+                              text: Utils.formatValue(Utils.calculateSumForName(
+                                  snapshot.data, 'Jenny')),
                               style: TextStyle(color: Colors.black87))
                         ]),
                       ),
@@ -97,8 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black87)),
                           TextSpan(
-                              text:
-                                  '${Utils.calculateSumForName(snapshot.data, 'Tobi')} €',
+                              text: Utils.formatValue(Utils.calculateSumForName(
+                                  snapshot.data, 'Tobi')),
                               style: TextStyle(color: Colors.black87))
                         ]),
                       ),
@@ -134,8 +134,11 @@ class _MyHomePageState extends State<MyHomePage> {
             return Card(
               child: ListTile(
                 title: Text(listEntries[i].title),
-                subtitle: Text(listEntries[i].date.toIso8601String()),
-                trailing: Text('${listEntries[i].value}'),
+                subtitle: Text(
+                  Utils.formatDate(listEntries[i].date),
+                  style: TextStyle(letterSpacing: 0.5),
+                ),
+                trailing: Text(Utils.formatValue(listEntries[i].value)),
                 leading: Text(listEntries[i].name.substring(0, 1)),
               ),
             );
