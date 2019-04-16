@@ -152,7 +152,11 @@ class _MyHomePageState extends State<MyHomePage> {
           return Scaffold(
               appBar: AppBar(
                 centerTitle: false,
-                title: Text('Übersicht'),
+                title: Text(
+                  'ÜBERSICHT',
+                  style: TextStyle(
+                      fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700),
+                ),
                 actions: <Widget>[
                   IconButton(
                     icon: Icon(Icons.person),
