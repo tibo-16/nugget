@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:nugget/src/models/data_entry.dart';
 import 'package:nugget/utils/credentials.dart';
 
 class FirebaseRepository {
@@ -26,5 +27,14 @@ class FirebaseRepository {
         .collection('data')
         .orderBy('date', descending: true)
         .snapshots();
+  }
+
+  void deleteDocument(DataEntry entry) {
+    _firestore
+        .collection('users')
+        .document(entry.name.toLowerCase())
+        .collection('data')
+        .document(entry.docId)
+        .delete();
   }
 }

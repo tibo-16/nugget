@@ -73,6 +73,8 @@ class FirebaseBloc implements BlocBase {
   Function get signIn => _repo.signIn;
   Function get signOut => _repo.signOut;
 
+  Function get delete => _repo.deleteDocument;
+
   @override
   void dispose() {}
 }

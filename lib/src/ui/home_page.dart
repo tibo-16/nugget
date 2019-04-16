@@ -76,7 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           TextSpan(
                               text: 'Jenny: ',
                               style: TextStyle(
-                                  fontFamily: 'CaviarDreams',
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
                                   color: Colors.black87)),
@@ -85,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   snapshot.data, 'Jenny')),
                               style: TextStyle(
                                   color: Colors.black87,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.bold))
                         ]),
                       ),
@@ -98,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           TextSpan(
                               text: 'Tobi: ',
                               style: TextStyle(
-                                  fontFamily: 'CaviarDreams',
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
                                   color: Colors.black87)),
@@ -107,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   snapshot.data, 'Tobi')),
                               style: TextStyle(
                                   color: Colors.black87,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.bold))
                         ]),
                       ),
@@ -137,21 +137,32 @@ class _MyHomePageState extends State<MyHomePage> {
       return Center(child: Text('Keine Daten!'));
     } else {
       return ListView.builder(
-          itemCount: listEntries.length,
-          itemBuilder: (context, i) {
-            return Card(
+        itemCount: listEntries.length,
+        itemBuilder: (context, i) {
+          return Card(
+            child: Dismissible(
+              key: UniqueKey(),
+              onDismissed: (_) {
+                _bloc.delete(listEntries[i]);
+              },
               child: ListTile(
                 title: Text(listEntries[i].title),
                 subtitle: Text(
                   Utils.formatDate(listEntries[i].date),
                   style: TextStyle(letterSpacing: 0.5),
                 ),
-                trailing: Text(Utils.formatValue(listEntries[i].value)),
-                leading:
-                    Icon(Utils.getIconForCategory(listEntries[i].category)),
+                trailing: Text(
+                  Utils.formatValue(listEntries[i].value),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                leading: Utils.getGradientIcon(
+                    Utils.getIconForCategory(listEntries[i].category)),
               ),
-            );
-          });
+            ),
+            elevation: 2.0,
+          );
+        },
+      );
     }
   }
 
@@ -162,6 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
         initialData: [],
         builder: (context, snapshot) {
           return Scaffold(
+              backgroundColor: Color.fromRGBO(245, 245, 245, 1.0),
               appBar: AppBar(
                 centerTitle: false,
                 title: Text(

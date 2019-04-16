@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nugget/src/models/data_entry.dart';
+import 'package:nugget/utils/app_colors.dart';
 
 class Utils {
   static String getShortMonth(int month) {
@@ -70,5 +71,20 @@ class Utils {
       default:
         return Icons.loyalty;
     }
+  }
+
+  static Widget getGradientIcon(IconData icon) {
+    return ShaderMask(
+      blendMode: BlendMode.srcATop,
+      shaderCallback: (rect) {
+        return LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: <Color>[AppColors.PURPLE, AppColors.BLUE],
+          tileMode: TileMode.mirror
+        ).createShader(rect);
+      },
+      child: Icon(icon),
+    );
   }
 }
