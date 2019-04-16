@@ -76,12 +76,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           TextSpan(
                               text: 'Jenny: ',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'CaviarDreams',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
                                   color: Colors.black87)),
                           TextSpan(
                               text: Utils.formatValue(Utils.calculateSumForName(
                                   snapshot.data, 'Jenny')),
-                              style: TextStyle(color: Colors.black87))
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold))
                         ]),
                       ),
                       onPressed: () => _setFilter(isLeft: true),
@@ -94,12 +98,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           TextSpan(
                               text: 'Tobi: ',
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'CaviarDreams',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
                                   color: Colors.black87)),
                           TextSpan(
                               text: Utils.formatValue(Utils.calculateSumForName(
                                   snapshot.data, 'Tobi')),
-                              style: TextStyle(color: Colors.black87))
+                              style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.bold))
                         ]),
                       ),
                       onPressed: () => _setFilter(isLeft: false),
@@ -139,7 +147,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(letterSpacing: 0.5),
                 ),
                 trailing: Text(Utils.formatValue(listEntries[i].value)),
-                leading: Text('${listEntries[i].category}'),
+                leading:
+                    Icon(Utils.getIconForCategory(listEntries[i].category)),
               ),
             );
           });

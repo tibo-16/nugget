@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:nugget/src/models/data_entry.dart';
 
 class Utils {
@@ -51,5 +52,23 @@ class Utils {
     }
 
     return sum;
+  }
+
+  // 1: Einkauf, 2: Takeaway, 3: Restaurant, 4: Freizeit, 5: Bargeld
+  static IconData getIconForCategory(int category) {
+    switch (category) {
+      case 1:
+        return Icons.local_grocery_store;
+      case 2:
+        return Icons.fastfood;
+      case 3:
+        return Icons.local_dining;
+      case 4:
+        return Icons.movie;
+      case 5:
+        return Icons.attach_money;
+      default:
+        return Icons.loyalty;
+    }
   }
 }
