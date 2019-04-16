@@ -139,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(letterSpacing: 0.5),
                 ),
                 trailing: Text(Utils.formatValue(listEntries[i].value)),
-                leading: Text(listEntries[i].name.substring(0, 1)),
+                leading: Text('${listEntries[i].category}'),
               ),
             );
           });

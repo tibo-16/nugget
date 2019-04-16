@@ -61,8 +61,10 @@ class FirebaseBloc implements BlocBase {
       Timestamp timestamp = document.data['date'];
       DateTime date =
           DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
+      int category = document.data['category'];
 
-      entryList.add(DataEntry(title, value, date, name, document.documentID));
+      entryList.add(
+          DataEntry(title, value, date, category, name, document.documentID));
     });
 
     return entryList;
