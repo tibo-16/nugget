@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nugget/src/blocs/firebase_bloc.dart';
 import 'package:nugget/src/models/data_entry.dart';
+import 'package:nugget/src/models/filter.dart';
 import 'package:nugget/src/resources/bloc_provider.dart';
 import 'package:nugget/utils/app_colors.dart';
 
@@ -13,11 +14,27 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   FirebaseBloc _bloc;
+  Filter _filter;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _filter = Filter(isActive: false, isLeft: true);
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _bloc = BlocProvider.of<FirebaseBloc>(context);
+  }
+
+  _setFilter({bool isLeft}) {
+    bool isActive = _filter.isActive && _filter.isLeft == isLeft ? false : true;
+
+    setState(() {
+      _filter = Filter(isActive: isActive, isLeft: isLeft);
+    });
   }
 
   @override
@@ -60,16 +77,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    alignment: Alignment(_filter.x, -1),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: (MediaQuery.of(context).size.width - 20) / 2,
+                      decoration: BoxDecoration(
+                        borderRadius: _filter.borderRadius,
+                        color: Colors.white70.withOpacity(_filter.opacity),
+                      ),
+                    ),
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Expanded(
                         child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10))),
-                          color: Colors.white70,
                           child: RichText(
                             text: TextSpan(children: [
                               TextSpan(
@@ -82,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   style: TextStyle(color: Colors.black87))
                             ]),
                           ),
-                          onPressed: () => print('jenny'),
+                          onPressed: () => _setFilter(isLeft: true),
                         ),
                       ),
                       Expanded(
@@ -99,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   style: TextStyle(color: Colors.black87))
                             ]),
                           ),
-                          onPressed: () => print('tobi'),
+                          onPressed: () => _setFilter(isLeft: false),
                         ),
                       ),
                     ],
@@ -120,15 +144,22 @@ class _MyHomePageState extends State<MyHomePage> {
             } else if (!snapshot.hasData) {
               return Center(child: Text('Keine Daten!'));
             } else {
+              List<DataEntry> listEntries = snapshot.data;
+
+              if (_filter.isActive) {
+                listEntries =
+                    listEntries.where((entry) => entry.name == _filter.name).toList();
+              }
+
               return ListView.builder(
-                  itemCount: snapshot.data.length,
+                  itemCount: listEntries.length,
                   itemBuilder: (context, i) {
                     return Card(
                       child: ListTile(
-                        title: Text(snapshot.data[i].title),
-                        subtitle: Text(snapshot.data[i].date.toIso8601String()),
-                        trailing: Text('${snapshot.data[i].value}'),
-                        leading: Text(snapshot.data[i].name.substring(0, 1)),
+                        title: Text(listEntries[i].title),
+                        subtitle: Text(listEntries[i].date.toIso8601String()),
+                        trailing: Text('${listEntries[i].value}'),
+                        leading: Text(listEntries[i].name.substring(0, 1)),
                       ),
                     );
                   });
