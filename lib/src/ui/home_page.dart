@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage>
   _showAddSheet() {
     _controller.animateTo(1);
     setState(() {
-      _savedFilter = _filter;
+      _savedFilter = Filter.from(_filter);
       _filter.updateFields(isActive: true, isLeft: true);
     });
   }
@@ -268,6 +268,8 @@ class _MyHomePageState extends State<MyHomePage>
                     _buildBody(snapshot),
                     AddSheet(
                       filter: _filter,
+                      addEntry: _bloc.add,
+                      close: _showHomePage,
                     )
                   ]));
         });

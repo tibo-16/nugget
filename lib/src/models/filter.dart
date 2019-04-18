@@ -30,4 +30,11 @@ class Filter {
 
     isActive ? opacity = 1.0 : opacity = 0.0;
   }
+
+  static Filter from(Filter filter) {
+    Filter newFilter = Filter(isActive: filter.isActive, isLeft: filter.isLeft);
+    newFilter.updateFields(isActive: filter.isActive, isLeft: filter.isLeft);
+
+    return newFilter;
+  }
 }

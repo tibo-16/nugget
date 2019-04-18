@@ -37,4 +37,14 @@ class FirebaseRepository {
         .document(entry.docId)
         .delete();
   }
+
+  addDocument(DataEntry entry) async {
+    DocumentReference ref = await _firestore
+        .collection('users')
+        .document(entry.name.toLowerCase())
+        .collection('data')
+        .add(DataEntry.toMap(entry));
+
+    entry.docId = ref.documentID;
+  }
 }

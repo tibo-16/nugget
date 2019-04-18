@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nugget/src/models/data_entry.dart';
 import 'package:nugget/src/resources/bloc_provider.dart';
@@ -25,7 +24,7 @@ class FirebaseBloc implements BlocBase {
       if (u != null) {
         return _repo
             .getEntriesStream('tobi')
-            .map((snap) => _mapToList('Tobi', snap.documents));
+            .map((snap) => DataEntry.mapToList('Tobi', snap.documents));
       } else {
         return Observable.just([]);
       }
@@ -36,7 +35,7 @@ class FirebaseBloc implements BlocBase {
       if (u != null) {
         return _repo
             .getEntriesStream('jenny')
-            .map((snap) => _mapToList('Jenny', snap.documents));
+            .map((snap) => DataEntry.mapToList('Jenny', snap.documents));
       } else {
         return Observable.just([]);
       }
@@ -51,29 +50,11 @@ class FirebaseBloc implements BlocBase {
           ..sort((a, b) => b.date.compareTo(a.date)));
   }
 
-  List<DataEntry> _mapToList(String name, List<DocumentSnapshot> docList) {
-    if (docList == null || docList.isEmpty) return [];
-
-    List<DataEntry> entryList = [];
-    docList.forEach((document) {
-      String title = document.data['title'];
-      double value = document.data['value'].toDouble();
-      Timestamp timestamp = document.data['date'];
-      DateTime date =
-          DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
-      int category = document.data['category'];
-
-      entryList.add(
-          DataEntry(title, value, date, category, name, document.documentID));
-    });
-
-    return entryList;
-  }
-
   Function get signIn => _repo.signIn;
   Function get signOut => _repo.signOut;
 
   Function get delete => _repo.deleteDocument;
+  Function get add => _repo.addDocument;
 
   @override
   void dispose() {}

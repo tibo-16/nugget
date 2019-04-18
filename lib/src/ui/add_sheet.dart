@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:nugget/src/models/data_entry.dart';
 import 'package:nugget/src/models/filter.dart';
 import 'package:nugget/utils/app_colors.dart';
 import 'package:nugget/utils/utils.dart';
 
 class AddSheet extends StatefulWidget {
   final Filter filter;
+  final Function addEntry;
+  final Function close;
 
-  AddSheet({@required this.filter});
+  AddSheet(
+      {@required this.filter, @required this.addEntry, @required this.close});
 
   @override
   State<StatefulWidget> createState() => _AddSheetState();
@@ -66,11 +70,15 @@ class _AddSheetState extends State<AddSheet> {
   }
 
   _save() {
-    print('Name: ${widget.filter.name}');
-    print('Titel: ${titleController.text}');
-    print('Betrag: ${double.tryParse(valueController.text)}');
-    print('Kategorie: $selectedCategory');
-    print('Datum: ${selectedDate.toIso8601String()}');
+    String name = widget.filter.name;
+    String title = titleController.text;
+    double value = double.tryParse(valueController.text);
+    int category = selectedCategory;
+    DateTime date = selectedDate;
+
+    DataEntry newEntry = DataEntry(title, value, date, category, name, null);
+    widget.addEntry(newEntry);
+    widget.close();
   }
 
   @override
