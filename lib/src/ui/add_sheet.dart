@@ -73,7 +73,7 @@ class _AddSheetState extends State<AddSheet> {
     String name = widget.filter.name;
     String title = titleController.text;
     double value = double.tryParse(valueController.text);
-    int category = selectedCategory;
+    int category = selectedCategory + 1;
     DateTime date = selectedDate;
 
     DataEntry newEntry = DataEntry(title, value, date, category, name, null);
