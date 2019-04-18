@@ -299,16 +299,16 @@ class _MyHomePageState extends State<MyHomePage>
                       fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700),
                 ),
                 actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.person),
-                    color: Colors.white,
-                    onPressed: _bloc.signIn,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.directions_run),
-                    color: Colors.white,
-                    onPressed: _bloc.signOut,
-                  ),
+                  // IconButton(
+                  //   icon: Icon(Icons.person),
+                  //   color: Colors.white,
+                  //   onPressed: _bloc.signIn,
+                  // ),
+                  // IconButton(
+                  //   icon: Icon(Icons.directions_run),
+                  //   color: Colors.white,
+                  //   onPressed: _bloc.signOut,
+                  // ),
                   IconButton(
                     icon: Icon(isHome ? Icons.add_circle_outline : Icons.close),
                     color: Colors.white,
