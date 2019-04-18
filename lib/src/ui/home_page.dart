@@ -80,6 +80,50 @@ class _MyHomePageState extends State<MyHomePage>
     });
   }
 
+  Future<bool> confirmDismiss(BuildContext context) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return SafeArea(
+            bottom: true,
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  RaisedButton(
+                    color: Colors.redAccent,
+                    textColor: Colors.white,
+                    child: Text(
+                      'LÖSCHEN',
+                      style: TextStyle(
+                        fontFamily: 'CaviarDreams',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context, true),
+                  ),
+                  RaisedButton(
+                    color: Colors.grey.shade300,
+                    textColor: Colors.black,
+                    child: Text(
+                      'NICHT LÖSCHEN',
+                      style: TextStyle(
+                        fontFamily: 'CaviarDreams',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context, false),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
   Widget _buildFilter(AsyncSnapshot<List<DataEntry>> snapshot) {
     return PreferredSize(
       preferredSize: Size.fromHeight(40),
@@ -196,6 +240,25 @@ class _MyHomePageState extends State<MyHomePage>
           return Card(
             child: Dismissible(
               key: UniqueKey(),
+              background: Container(
+                padding: EdgeInsets.all(16),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(listEntries[i].title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.redAccent,
+                              fontSize: 16)),
+                    ),
+                    Icon(
+                      Icons.delete_forever,
+                      color: Colors.redAccent,
+                    )
+                  ],
+                ),
+              ),
+              confirmDismiss: (_) => confirmDismiss(context),
               onDismissed: (_) {
                 _bloc.delete(listEntries[i]);
               },
