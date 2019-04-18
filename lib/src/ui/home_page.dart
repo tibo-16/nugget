@@ -224,13 +224,36 @@ class _MyHomePageState extends State<MyHomePage>
 
     if (snapshot.hasError) {
       print(snapshot.error);
-      return Center(child: Text('Fehler!'));
+      return Center(
+          child: Text(
+        'Fehler!\nBitte neustarten!',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Colors.grey.shade600),
+      ));
     } else if (!snapshot.hasData) {
-      return Center(child: Text('Keine Daten!'));
+      return Center(
+          child: Text(
+        'Es wurden keine Daten gefunden!',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: Colors.grey.shade600),
+      ));
     } else {
       if (listEntries.isEmpty) {
         return Center(
-          child: Text('Noch keine Einträge vorhanden!'),
+          child: Text(
+            'Es sind noch\nkeine Einträge vorhanden!',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey.shade600),
+          ),
         );
       }
 
