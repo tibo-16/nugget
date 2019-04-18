@@ -14,40 +14,40 @@ class FirebaseBloc implements BlocBase {
 
   FirebaseBloc() {
     // Check if user is logged in. If not, then login()
-    _repo.signIn().then((_) {
-      // Observer for auth state
-      _user = Observable(_repo.authStream);
+    _repo.signIn();
 
-      // Alle Einträge von Tobi
-      tobiEntries = _user.switchMap((FirebaseUser u) {
-        if (u != null) {
-          return _repo
-              .getEntriesStream('tobi')
-              .map((snap) => DataEntry.mapToList('Tobi', snap.documents));
-        } else {
-          return Observable.just([]);
-        }
-      });
+    // Observer for auth state
+    _user = Observable(_repo.authStream);
 
-      // Alle Einträge von Jenny
-      jennyEntries = _user.switchMap((FirebaseUser u) {
-        if (u != null) {
-          return _repo
-              .getEntriesStream('jenny')
-              .map((snap) => DataEntry.mapToList('Jenny', snap.documents));
-        } else {
-          return Observable.just([]);
-        }
-      });
-
-      // Alle Einträge
-      allEntries = Observable.combineLatest2(
-          tobiEntries,
-          jennyEntries,
-          (List<DataEntry> t, List<DataEntry> j) => List.from(t)
-            ..addAll(j)
-            ..sort((a, b) => b.date.compareTo(a.date)));
+    // Alle Einträge von Tobi
+    tobiEntries = _user.switchMap((FirebaseUser u) {
+      if (u != null) {
+        return _repo
+            .getEntriesStream('tobi')
+            .map((snap) => DataEntry.mapToList('Tobi', snap.documents));
+      } else {
+        return Observable.just([]);
+      }
     });
+
+    // Alle Einträge von Jenny
+    jennyEntries = _user.switchMap((FirebaseUser u) {
+      if (u != null) {
+        return _repo
+            .getEntriesStream('jenny')
+            .map((snap) => DataEntry.mapToList('Jenny', snap.documents));
+      } else {
+        return Observable.just([]);
+      }
+    });
+
+    // Alle Einträge
+    allEntries = Observable.combineLatest2(
+        tobiEntries,
+        jennyEntries,
+        (List<DataEntry> t, List<DataEntry> j) => List.from(t)
+          ..addAll(j)
+          ..sort((a, b) => b.date.compareTo(a.date)));
   }
 
   Function get signIn => _repo.signIn;
