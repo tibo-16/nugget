@@ -32,8 +32,27 @@ class Utils {
     }
   }
 
+  static String getShortWeekDay(int weekday) {
+    switch (weekday) {
+      case DateTime.monday:
+        return 'Mo';
+      case DateTime.tuesday:
+        return 'Di';
+      case DateTime.wednesday:
+        return 'Mi';
+      case DateTime.thursday:
+        return 'Do';
+      case DateTime.friday:
+        return 'Fr';
+      case DateTime.saturday:
+        return 'Sa';
+      default:
+        return 'So';
+    }
+  }
+
   static String formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(2, '0')}.${getShortMonth(date.month)}.${date.year} | ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')} Uhr';
+    return '${date.day.toString().padLeft(2, '0')}.${getShortMonth(date.month)}.${date.year}';
   }
 
   static String formatValue(double value) {
@@ -78,11 +97,11 @@ class Utils {
       blendMode: BlendMode.srcATop,
       shaderCallback: (rect) {
         return LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: <Color>[AppColors.PURPLE, AppColors.BLUE],
-          tileMode: TileMode.mirror
-        ).createShader(rect);
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: <Color>[AppColors.PURPLE, AppColors.BLUE],
+                tileMode: TileMode.mirror)
+            .createShader(rect);
       },
       child: Icon(icon),
     );

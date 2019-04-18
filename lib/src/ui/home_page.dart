@@ -127,6 +127,8 @@ class _MyHomePageState extends State<MyHomePage>
                         ]),
                       ),
                       onPressed: () => _setFilter(isLeft: true),
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
                     ),
                   ),
                   Expanded(
@@ -150,6 +152,8 @@ class _MyHomePageState extends State<MyHomePage>
                         ]),
                       ),
                       onPressed: () => _setFilter(isLeft: false),
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
                     ),
                   ),
                 ],
@@ -254,6 +258,7 @@ class _MyHomePageState extends State<MyHomePage>
               ),
               body: TabBarView(
                   controller: _controller,
+                  physics: NeverScrollableScrollPhysics(),
                   children: <Widget>[_buildBody(snapshot), AddSheet()]));
         });
   }
