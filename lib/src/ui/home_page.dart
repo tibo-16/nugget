@@ -55,8 +55,13 @@ class _MyHomePageState extends State<MyHomePage>
   _setFilter({bool isLeft}) {
     bool isActive = _filter.isActive && _filter.isLeft == isLeft ? false : true;
 
+    // Überschreiben
+    if (!isHome) {
+      isActive = true;
+    }
+
     setState(() {
-      _filter = Filter(isActive: isActive, isLeft: isLeft);
+      _filter.updateFields(isActive: isActive, isLeft: isLeft);
     });
   }
 
@@ -71,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage>
     _controller.animateTo(1);
     setState(() {
       _savedFilter = _filter;
-      _filter = Filter(isActive: false, isLeft: true);
+      _filter.updateFields(isActive: true, isLeft: true);
     });
   }
 
@@ -259,7 +264,12 @@ class _MyHomePageState extends State<MyHomePage>
               body: TabBarView(
                   controller: _controller,
                   physics: NeverScrollableScrollPhysics(),
-                  children: <Widget>[_buildBody(snapshot), AddSheet()]));
+                  children: <Widget>[
+                    _buildBody(snapshot),
+                    AddSheet(
+                      filter: _filter,
+                    )
+                  ]));
         });
   }
 }

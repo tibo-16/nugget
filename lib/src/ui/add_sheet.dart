@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:nugget/src/models/filter.dart';
 import 'package:nugget/utils/app_colors.dart';
 import 'package:nugget/utils/utils.dart';
 
 class AddSheet extends StatefulWidget {
+  final Filter filter;
+
+  AddSheet({@required this.filter});
 
   @override
   State<StatefulWidget> createState() => _AddSheetState();
@@ -27,6 +31,8 @@ class _AddSheetState extends State<AddSheet> {
     setState(() {
       selectedCategory = category;
     });
+
+    _checkSave();
   }
 
   _changeDate() async {
@@ -49,7 +55,8 @@ class _AddSheetState extends State<AddSheet> {
     // Titel
     bool title = titleController.text.isNotEmpty;
     // Betrag
-    bool value = valueController.text.isNotEmpty;
+    bool value = valueController.text.isNotEmpty &&
+        double.tryParse(valueController.text) != null;
     // Kategorie
     bool category = selectedCategory != -1;
 
@@ -59,7 +66,11 @@ class _AddSheetState extends State<AddSheet> {
   }
 
   _save() {
-    print('hi');
+    print('Name: ${widget.filter.name}');
+    print('Titel: ${titleController.text}');
+    print('Betrag: ${double.tryParse(valueController.text)}');
+    print('Kategorie: $selectedCategory');
+    print('Datum: ${selectedDate.toIso8601String()}');
   }
 
   @override

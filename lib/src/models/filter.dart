@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Filter {
-  final bool isActive;
-  final bool isLeft;
+  bool isActive;
+  bool isLeft;
 
   double x;
   BorderRadiusGeometry borderRadius;
@@ -10,6 +10,13 @@ class Filter {
   String name;
 
   Filter({@required this.isActive, @required this.isLeft}) {
+    updateFields(isActive: isActive, isLeft: isLeft);
+  }
+
+  updateFields({@required bool isActive, @required bool isLeft}) {
+    this.isActive = isActive;
+    this.isLeft = isLeft;
+
     isLeft
         ? borderRadius = BorderRadius.only(
             topLeft: Radius.circular(10.0), bottomLeft: Radius.circular(10.0))
