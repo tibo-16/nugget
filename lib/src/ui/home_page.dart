@@ -3,6 +3,7 @@ import 'package:nugget/src/blocs/firebase_bloc.dart';
 import 'package:nugget/src/models/data_entry.dart';
 import 'package:nugget/src/models/filter.dart';
 import 'package:nugget/src/resources/bloc_provider.dart';
+import 'package:nugget/src/ui/add_sheet.dart';
 import 'package:nugget/utils/app_colors.dart';
 import 'package:nugget/utils/utils.dart';
 
@@ -13,15 +14,22 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   FirebaseBloc _bloc;
   Filter _filter;
+  Filter _savedFilter;
+
+  TabController _controller;
 
   @override
   void initState() {
     super.initState();
 
     _filter = Filter(isActive: false, isLeft: true);
+    _savedFilter = null;
+
+    _controller = TabController(vsync: this, length: 2);
   }
 
   @override
@@ -30,11 +38,40 @@ class _MyHomePageState extends State<MyHomePage> {
     _bloc = BlocProvider.of<FirebaseBloc>(context);
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  bool get isHome {
+    return _controller.index == 0 ? true : false;
+  }
+
+  String get title {
+    return isHome ? 'ÜBERSICHT' : 'NEUER EINTRAG';
+  }
+
   _setFilter({bool isLeft}) {
     bool isActive = _filter.isActive && _filter.isLeft == isLeft ? false : true;
 
     setState(() {
       _filter = Filter(isActive: isActive, isLeft: isLeft);
+    });
+  }
+
+  _showHomePage() {
+    _controller.animateTo(0);
+    setState(() {
+      _filter = _savedFilter;
+    });
+  }
+
+  _showAddSheet() {
+    _controller.animateTo(1);
+    setState(() {
+      _savedFilter = _filter;
+      _filter = Filter(isActive: false, isLeft: true);
     });
   }
 
@@ -74,14 +111,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                              text: 'Jenny: ',
+                              text: 'Jenny',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
                                   color: Colors.black87)),
                           TextSpan(
-                              text: Utils.formatValue(Utils.calculateSumForName(
-                                  snapshot.data, 'Jenny')),
+                              text: isHome
+                                  ? ': ${Utils.formatValue(Utils.calculateSumForName(snapshot.data, 'Jenny'))}'
+                                  : '',
                               style: TextStyle(
                                   color: Colors.black87,
                                   fontSize: 15,
@@ -96,14 +134,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                              text: 'Tobi: ',
+                              text: 'Tobi',
                               style: TextStyle(
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
                                   color: Colors.black87)),
                           TextSpan(
-                              text: Utils.formatValue(Utils.calculateSumForName(
-                                  snapshot.data, 'Tobi')),
+                              text: isHome
+                                  ? ': ${Utils.formatValue(Utils.calculateSumForName(snapshot.data, 'Tobi'))}'
+                                  : '',
                               style: TextStyle(
                                   color: Colors.black87,
                                   fontSize: 15,
@@ -136,6 +175,12 @@ class _MyHomePageState extends State<MyHomePage> {
     } else if (!snapshot.hasData) {
       return Center(child: Text('Keine Daten!'));
     } else {
+      if (listEntries.isEmpty) {
+        return Center(
+          child: Text('Noch keine Einträge vorhanden!'),
+        );
+      }
+
       return ListView.builder(
         itemCount: listEntries.length,
         itemBuilder: (context, i) {
@@ -177,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
               appBar: AppBar(
                 centerTitle: false,
                 title: Text(
-                  'ÜBERSICHT',
+                  title,
                   style: TextStyle(
                       fontFamily: 'CaviarDreams', fontWeight: FontWeight.w700),
                 ),
@@ -192,6 +237,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.white,
                     onPressed: _bloc.signOut,
                   ),
+                  IconButton(
+                    icon: Icon(isHome ? Icons.add_circle_outline : Icons.close),
+                    color: Colors.white,
+                    onPressed: isHome ? _showAddSheet : _showHomePage,
+                  )
                 ],
                 flexibleSpace: Container(
                   decoration: BoxDecoration(
@@ -202,7 +252,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 bottom: _buildFilter(snapshot),
               ),
-              body: _buildBody(snapshot));
+              body: TabBarView(
+                  controller: _controller,
+                  children: <Widget>[_buildBody(snapshot), AddSheet()]));
         });
   }
 }
