@@ -106,4 +106,12 @@ class Utils {
       child: Icon(icon),
     );
   }
+
+  static String getEmojiForName(String name) {
+    if (name.toLowerCase() == 'tobi') {
+      return '🐻';
+    } else {
+      return '🦊';
+    }
+  }
 }

@@ -11,8 +11,8 @@ class FirebaseRepository {
 
   Stream<FirebaseUser> get authStream => _auth.onAuthStateChanged;
 
-  void signIn() {
-    _auth.signInWithEmailAndPassword(
+  Future<FirebaseUser> signIn() {
+    return _auth.signInWithEmailAndPassword(
         email: Credentials.EMAIL, password: Credentials.PASSWORD);
   }
 

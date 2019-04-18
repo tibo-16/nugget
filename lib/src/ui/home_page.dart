@@ -288,7 +288,7 @@ class _MyHomePageState extends State<MyHomePage>
               child: ListTile(
                 title: Text(listEntries[i].title),
                 subtitle: Text(
-                  Utils.formatDate(listEntries[i].date),
+                  '${Utils.getEmojiForName(listEntries[i].name)} - ${Utils.formatDate(listEntries[i].date)}',
                   style: TextStyle(letterSpacing: 0.5),
                 ),
                 trailing: Text(

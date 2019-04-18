@@ -83,91 +83,95 @@ class _AddSheetState extends State<AddSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _hideKeyboard,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text(
-              'Titel',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-            TextField(
-              controller: titleController,
-              onChanged: (_) => _checkSave(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Text(
-                'Betrag',
+    return SingleChildScrollView(
+      child: GestureDetector(
+        onTap: _hideKeyboard,
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                'Titel',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
-            ),
-            TextField(
-              controller: valueController,
-              onChanged: (_) => _checkSave(),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(suffixText: '€'),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Text(
-                'Kategorie',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              TextField(
+                controller: titleController,
+                textCapitalization: TextCapitalization.sentences,
+                onChanged: (_) => _checkSave(),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(
-                  5,
-                  (i) => IconButton(
-                      color:
-                          selectedCategory == i ? AppColors.BLUE : Colors.grey,
-                      icon: Icon(Utils.getIconForCategory(i + 1)),
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      onPressed: () => _selectCategory(i))),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Text(
-                'Datum',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-            ),
-            InkWell(
-              child: Container(
-                height: 50,
-                alignment: Alignment.centerLeft,
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(color: Colors.grey, width: 2))),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
-                  formattedDate,
-                  style: TextStyle(fontSize: 16, letterSpacing: 0.2),
+                  'Betrag',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
               ),
-              onTap: () => _changeDate(),
-            ),
-            Padding(
+              TextField(
+                controller: valueController,
+                onChanged: (_) => _checkSave(),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                decoration: InputDecoration(suffixText: '€'),
+              ),
+              Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: RaisedButton(
-                    color: AppColors.PURPLE,
-                    child: Text(
-                      'SPEICHERN',
-                      style: TextStyle(
-                          fontFamily: 'CaviarDreams',
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white),
-                    ),
-                    onPressed: saveEnabled ? _save : null,
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent))
-          ],
+                child: Text(
+                  'Kategorie',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: List.generate(
+                    5,
+                    (i) => IconButton(
+                        color: selectedCategory == i
+                            ? AppColors.BLUE
+                            : Colors.grey,
+                        icon: Icon(Utils.getIconForCategory(i + 1)),
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        onPressed: () => _selectCategory(i))),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  'Datum',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              InkWell(
+                child: Container(
+                  height: 50,
+                  alignment: Alignment.centerLeft,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: Colors.grey, width: 2))),
+                  child: Text(
+                    formattedDate,
+                    style: TextStyle(fontSize: 16, letterSpacing: 0.2),
+                  ),
+                ),
+                onTap: () => _changeDate(),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: RaisedButton(
+                      color: AppColors.PURPLE,
+                      child: Text(
+                        'SPEICHERN',
+                        style: TextStyle(
+                            fontFamily: 'CaviarDreams',
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white),
+                      ),
+                      onPressed: saveEnabled ? _save : null,
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent))
+            ],
+          ),
         ),
       ),
     );
