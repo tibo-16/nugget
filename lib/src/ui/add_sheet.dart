@@ -60,7 +60,7 @@ class _AddSheetState extends State<AddSheet> {
     bool title = titleController.text.isNotEmpty;
     // Betrag
     bool value = valueController.text.isNotEmpty &&
-        double.tryParse(valueController.text) != null;
+        double.tryParse(valueController.text.replaceAll(',', '.')) != null;
     // Kategorie
     bool category = selectedCategory != -1;
 
@@ -72,7 +72,7 @@ class _AddSheetState extends State<AddSheet> {
   _save() {
     String name = widget.filter.name;
     String title = titleController.text;
-    double value = double.tryParse(valueController.text);
+    double value = double.tryParse(valueController.text.replaceAll(',', '.'));
     int category = selectedCategory + 1;
     DateTime date = selectedDate;
 
